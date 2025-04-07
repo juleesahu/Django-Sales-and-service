@@ -1,0 +1,10 @@
+name: Simple Pass Command
+
+on: [push]
+
+jobs:
+  pass-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Pass Command
+        run: echo "Pass"
