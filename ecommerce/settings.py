@@ -13,11 +13,16 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 import os
 from django.conf import settings
 
 load_dotenv()
+
+# Automatically choose env file
+ENV_FILE = BASE_DIR / ".env.local" if (BASE_DIR / ".env.local").exists() else BASE_DIR / ".env.prod"
+load_dotenv(dotenv_path=ENV_FILE)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
