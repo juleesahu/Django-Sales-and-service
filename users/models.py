@@ -51,10 +51,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return unique_id
 
     def save(self, *args, **kwargs):
-        """Ensure unique_id is generated before saving"""
+        """Ensure unique_id and referral_code are generated before saving"""
         if not self.unique_id:
             self.unique_id = self.generate_unique_id()
+    
+        if not self.referral_code:
+            # Use the last 5 characters of the unique_id as the referral code if not set
+            self.referral_code = f"REF-{self.unique_id[-5:]}"
+
         super().save(*args, **kwargs)
+
 
     def get_referral_link(self):
         """Generates the referral link containing the user's unique ID."""
@@ -74,7 +80,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 # Profile model
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='uploads/products', null=True, blank=True, default='default/pic.png')
+    image = models.ImageField(upload_to='uploads/profile_pic', null=True, blank=True, default='default/pic.png')
     date_modified = models.DateTimeField(auto_now=True)
     phone = models.CharField(max_length=20, blank=True)
     address1 = models.CharField(max_length=200, blank=True)

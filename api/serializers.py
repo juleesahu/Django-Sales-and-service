@@ -8,9 +8,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'first_name', 'last_name', 'unique_id', 'referral_code', 'referred_by']
+        ref_name = "ApiCustomUserSerializer"
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer(read_only=True)
+    referral_code = serializers.CharField(source='user.referral_code', read_only=True)
+    unique_id = serializers.CharField(source='user.unique_id', read_only=True)
+    
     class Meta:
         model = Profile
         fields = '__all__'       

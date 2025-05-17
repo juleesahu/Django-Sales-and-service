@@ -139,7 +139,8 @@ def user_profile(request):
             'last_name': request.user.last_name,
             'unique_id': request.user.unique_id,
             'referral_link': f"{request.scheme}://{request.get_host()}/users/register/?ref={request.user.unique_id}",
-            'parent_sponsor': request.user.parent_sponsor.unique_id if request.user.parent_sponsor else "None"
+            'parent_sponsor': request.user.parent_sponsor.unique_id if request.user.parent_sponsor else "None",
+            'profile_image': profile.image.url if profile.image else '/media/default/pic.png',
         }
         return render(request, 'users/user_profile.html', {'user_data': user_data})
     messages.error(request, "You must be logged in to view your profile.")

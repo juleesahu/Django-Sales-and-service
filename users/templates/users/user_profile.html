@@ -9,6 +9,9 @@
     <div class="content">
         <div class="main-content">
             <section>
+                <div class="profile-picture">
+                    <img src="{{ user_data.profile_image }}" alt="Profile Picture" class="profile-img">
+                </div>
                 <h1 class="inventory-headings">
                     {{ user_data.first_name }} {{ user_data.last_name }} (ID: {{ user_data.unique_id }})
                 </h1>
