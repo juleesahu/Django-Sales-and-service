@@ -1,10 +1,16 @@
 from rest_framework import serializers
 from store.models import Category, Product , ProductImage, MobileBanner
-from users.models import Profile, ShippingAddress
+from users.models import Profile, ShippingAddress, CustomUser
 from cart.models import Order, OrderItem
 
 
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'email', 'first_name', 'last_name', 'unique_id', 'referral_code', 'referred_by']
+
 class ProfileSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
     class Meta:
         model = Profile
         fields = '__all__'       
