@@ -1,11 +1,8 @@
 {% extends 'main/base.html' %}
 
-
 {% block title %}
-    cart
+    Cart
 {% endblock title %}
-    
-
 
 {% block content %}
 <div class="cart-container">
@@ -18,7 +15,7 @@
         <thead>
             <tr>
                 <th>Items: <strong>{{ total_quantity }}</strong></th>
-                <th>Total: <strong>$ {{ order_total }}</strong></th>
+                <th>Total: <strong>Rs. {{ order_total }}</strong></th>
                 
                 {% if user.is_authenticated %}
                 <th class="checkout"><a href="{% url 'checkout' %}"><button type="button">Checkout</button></a></th>
@@ -31,7 +28,6 @@
         {% endif %}
     </table>
 
-    
     <div class="cart-elements-container">
         {% if cart_items %}
         <div class="cart-element-header">
@@ -70,19 +66,14 @@
         </div>
         {% endif %}
     </div>
-    
-    
 </div>
 
 <script>
-    $(document).on('click', '.add-quantity', function(e){
+$(document).on('click', '.add-quantity', function(e){
     e.preventDefault();
     var productId = $(this).data('index');
     var quantityElement = $('.item-quantity[data-index="' + productId + '"]');
-    
-    // Convert the quantity to a number and increment
     var productQty = parseFloat(quantityElement.text()) + 1;
-    
     $.ajax({
         type: 'POST',
         url: '{% url "cart_update" %}',
@@ -96,7 +87,7 @@
             location.reload();
         },
         error: function(xhr, errmsg, err){
-            // Handle error
+            console.error("Error updating cart:", errmsg);
         }
     });
 });
@@ -105,14 +96,8 @@ $(document).on('click', '.reduce-quantity', function(e){
     e.preventDefault();
     var productId = $(this).data('index');
     var quantityElement = $('.item-quantity[data-index="' + productId + '"]');
-    
-    // Convert the quantity to a number and decrement
     var productQty = parseFloat(quantityElement.text()) - 1;
-    
-    if (productQty < 1) {
-
-            return;  
-        }
+    if (productQty < 1) return;
     $.ajax({
         type: 'POST',
         url: '{% url "cart_update" %}',
@@ -126,16 +111,14 @@ $(document).on('click', '.reduce-quantity', function(e){
             location.reload();
         },
         error: function(xhr, errmsg, err){
-            // Handle error
+            console.error("Error reducing cart item:", errmsg);
         }
     });
 });
 
-
 $(document).on('click', '.remove-item', function(e){
     e.preventDefault();
     var productId = $(this).data('index');
-    
     $.ajax({
         type: 'POST',
         url: '{% url "cart_delete" %}',
@@ -148,13 +131,10 @@ $(document).on('click', '.remove-item', function(e){
             location.reload();
         },
         error: function(xhr, errmsg, err){
-            // Handle error
+            console.error("Error removing cart item:", errmsg);
         }
     });
 });
-
 </script>
 
-
 {% endblock content %}
-    
